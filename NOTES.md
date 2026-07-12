@@ -583,4 +583,108 @@ for (int i = 0; i < m; i++)
 2. 引用数封顶 n，计数映射到 n+1；从高到低累加，累加值 >= 当前引用即 H。（274）
 3. 方向标志 ±1，到边即翻转；逐行 StringBuilder，最后拼成串。（6）
 
+## Day 6 · 字符串 I：罗马 / 前缀 / 末词
+
+### 13 罗马数字转整数 [E]  模式: 字符串 I
+
+**一句话题意**：罗马数字字符串转整数。
+
+**记忆口诀**：
+> 前小后减，否则加；从左到右扫一遍，值入 Map 查。
+
+**可背模板**：
+  map = {I:1, V:5, X:10, L:50, C:100, D:500, M:1000}
+  result = 0
+  for i in [0, n):
+      cur = map[s[i]]
+      next = i+1 < n ? map[s[i+1]] : 0
+      if cur < next: result -= cur
+      else: result += cur
+  return result
+
+**Java 完整解法**：[Solution_13.java](file:///c:/Users/26947/Desktop/summer/Algorithm/src/phase1_arrays_strings/day6_string_roman_prefix/Solution_13.java)
+
+**复杂度**：O(n) / O(1)
+
+**关键易错点**：
+1. `i+1` 越界判空（next = 0，cur 必 ≥ 0 即加）
+2. `cur < next` 减（如 IV=4），否则加
+3. 罗马数字规则：小数在大数前表示减（仅 4/9 倍数）
+
+**Java 基础点**：`HashMap`、`charAt`、三元运算符
+**ACM 输入套路**：套路 2 字符串 next
+
+**关联题**：12（整数转罗马，反向）
+
+---
+
+### 14 最长公共前缀 [E]  模式: 字符串 I
+
+**一句话题意**：找字符串数组的最长公共前缀。
+
+**记忆口诀**：
+> 纵向扫描字符列，逐位比较所有串；遇到不同或越界，截断返回。
+
+**可背模板**：
+  if len == 0: return ""
+  for i in [0, strs[0].len):
+      c = strs[0][i]
+      for j in [1, len):
+          if i >= strs[j].len or strs[j][i] != c:
+              return strs[0].substring(0, i)
+  return strs[0]
+
+**Java 完整解法**：[Solution_14.java](file:///c:/Users/26947/Desktop/summer/Algorithm/src/phase1_arrays_strings/day6_string_roman_prefix/Solution_14.java)
+
+**复杂度**：O(S) / O(1)（S 为所有字符串总长度）
+
+**关键易错点**：
+1. 空数组判空返回 ""
+2. `i >= strs[j].length()` 越界检查（某串比 strs[0] 短）
+3. `substring(0, i)` 左闭右开
+
+**Java 基础点**：`String.length()` 方法（vs `arr.length` 字段）、`charAt`、`substring`
+**ACM 输入套路**：套路 1 n+字符串数组
+
+**关联题**：纵向扫描典范
+
+---
+
+### 58 最后一个单词的长度 [E]  模式: 字符串 I
+
+**一句话题意**：返回字符串中最后一个单词的长度。
+
+**记忆口诀**：
+> 从尾向前跳空格，跳完空格数字符；遇到空格或到头即停。
+
+**可背模板**：
+  i = n - 1
+  while i >= 0 and s[i] == ' ': i--      // 跳尾部空格
+  len = 0
+  while i >= 0 and s[i] != ' ':           // 数非空格
+      len++, i--
+  return len
+
+**Java 完整解法**：[Solution_58.java](file:///c:/Users/26947/Desktop/summer/Algorithm/src/phase1_arrays_strings/day6_string_roman_prefix/Solution_58.java)
+
+**复杂度**：O(n) / O(1)
+
+**关键易错点**：
+1. 先跳尾部空格（避免 "a " 这种尾部空格干扰）
+2. 再数非空格字符
+3. 两段式 while，逻辑清晰
+
+**Java 基础点**：`String.length()` 方法、`charAt`、从尾向前的 while
+**ACM 输入套路**：套路 3 整行 nextLine
+
+**关联题**：从尾向前思想典范
+
+---
+
+### 今日口诀合集（Day 6）
+
+1. 前小后减，否则加；从左到右扫一遍，值入 Map 查。（13）
+2. 纵向扫描字符列，逐位比较所有串；遇到不同或越界，截断返回。（14）
+3. 从尾向前跳空格，跳完空格数字符；遇到空格或到头即停。（58）
+
 <!-- 后续 Day 2–7 同样在此追加 -->
