@@ -373,4 +373,108 @@ for (int i = 0; i < m; i++)
 2. 可多次买卖，累加正差价；今天比昨高，就把差吃下。（122）
 3. 总剩余判否，单站累加判起点；累加为负即重置，起点设为下一站。（134）
 
+## Day 4 · 贪心 II：跳跃 + 摩尔投票
+
+### 55 跳跃游戏 [M]  模式: 贪心 II
+
+**一句话题意**：数组每元素代表最大跳数，判断能否到末尾。
+
+**记忆口诀**：
+> 维护最远可达，每步更新 maxReach；maxReach >= n-1 即可到。
+
+**可背模板**：
+  maxReach = 0
+  for i in [0, n):
+      if i > maxReach: return false
+      maxReach = max(maxReach, i + nums[i])
+      if maxReach >= n-1: return true
+  return true
+
+**Java 完整解法**：[Solution_55.java](file:///c:/Users/26947/Desktop/summer/Algorithm/src/phase1_arrays_strings/day4_greedy_jump_majority/Solution_55.java)
+
+**复杂度**：O(n) / O(1)
+
+**关键易错点**：
+1. `i > maxReach` 才返回 false（当前位置不可达）
+2. `maxReach >= n-1` 早返回 true（已能到末尾）
+3. 不是 `nums[i] == 0` 判断（即使某点为 0，只要之前能跳过即可）
+
+**Java 基础点**：`Math.max`、for 循环早返回
+**ACM 输入套路**：套路 2 多组直到 EOF
+
+**关联题**：45（求最少步数版）
+
+---
+
+### 45 跳跃游戏 II [M]  模式: 贪心 II ⭐重点题
+
+**一句话题意**：每元素代表最大跳数，求到末尾的最少步数。
+
+**记忆口诀**：
+> 维护当前边界，到了就跳一步；最远可达更新，到边界换新界。
+
+**可背模板**：
+  if n <= 1: return 0
+  steps = 0, curEnd = 0, maxReach = 0
+  for i in [0, n-1):
+      maxReach = max(maxReach, i + nums[i])
+      if i == curEnd:
+          steps++
+          curEnd = maxReach
+          if curEnd >= n-1: break
+  return steps
+
+**Java 完整解法**：[Solution_45.java](file:///c:/Users/26947/Desktop/summer/Algorithm/src/phase1_arrays_strings/day4_greedy_jump_majority/Solution_45.java)
+
+**复杂度**：O(n) / O(1)
+
+**关键易错点**：
+1. 循环到 `n-2`（最后一步不必跳，到了 curEnd 自动 +1）
+2. `i == curEnd` 才步数++（到达当前边界必须跳一步）
+3. `curEnd >= n-1` 早退出（已能到末尾）
+4. `n <= 1` 特判返回 0（已在起点）
+
+**Java 基础点**：`break` 早退出、边界变量维护
+**ACM 输入套路**：套路 2 多组直到 EOF
+
+**关联题**：55（可达性判断版）
+
+---
+
+### 169 多数元素 [E]  模式: 贪心 II（摩尔投票）
+
+**一句话题意**：找出现次数超过 n/2 的元素。
+
+**记忆口诀**：
+> 计数归零换人，同则加一异减一；多数必胜出，最后候选人即答案。
+
+**可背模板**：
+  candidate = 0, cnt = 0
+  for x in nums:
+      if cnt == 0: candidate = x
+      cnt += (x == candidate) ? 1 : -1
+  return candidate
+
+**Java 完整解法**：[Solution_169.java](file:///c:/Users/26947/Desktop/summer/Algorithm/src/phase1_arrays_strings/day4_greedy_jump_majority/Solution_169.java)
+
+**复杂度**：O(n) / O(1)
+
+**关键易错点**：
+1. `cnt == 0` 换人（当前候选被抵消完）
+2. 三元运算符紧凑写法 `(x == candidate) ? 1 : -1`
+3. 题目保证存在多数元素，无需二次验证；若不保证需再扫一遍统计 candidate 出现次数
+
+**Java 基础点**：三元运算符、增强 for
+**ACM 输入套路**：套路 2 多组直到 EOF
+
+**关联题**：摩尔投票典范，229（求超过 n/3 的多数元素，进阶）
+
+---
+
+### 今日口诀合集（Day 4）
+
+1. 维护最远可达，每步更新 maxReach；maxReach >= n-1 即可到。（55）
+2. 维护当前边界，到了就跳一步；最远可达更新，到边界换新界。（45）
+3. 计数归零换人，同则加一异减一；多数必胜出，最后候选人即答案。（169）
+
 <!-- 后续 Day 2–7 同样在此追加 -->
