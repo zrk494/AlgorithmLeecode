@@ -687,4 +687,110 @@ for (int i = 0; i < m; i++)
 2. 纵向扫描字符列，逐位比较所有串；遇到不同或越界，截断返回。（14）
 3. 从尾向前跳空格，跳完空格数字符；遇到空格或到头即停。（58）
 
-<!-- 后续 Day 2–7 同样在此追加 -->
+## Day 7 · 字符串 II + 数据结构设计 + 复习
+
+### 28 找出字符串中第一个匹配项的下标 [E]  模式: 字符串匹配
+
+**一句话题意**：返回 needle 在 haystack 中首次出现的下标。
+
+**记忆口诀**：
+> 暴力双循环，外层 haystack，内层 needle；首字匹配才深入，全部对上即返回。
+
+**可背模板**：
+  if needle.isEmpty(): return 0
+  for i in [0, n-m]:
+      j = 0
+      while j < m and haystack[i+j] == needle[j]: j++
+      if j == m: return i
+  return -1
+
+**Java 完整解法**：[Solution_28.java](file:///c:/Users/26947/Desktop/summer/Algorithm/src/phase1_arrays_strings/day7_string_match_ds_review/Solution_28.java)
+
+**复杂度**：O(n*m) / O(1)
+
+**关键易错点**：
+1. `needle.isEmpty()` 返回 0（空串匹配在起点）
+2. 外层循环上限 `haystack.length() - needle.length()`（避免越界）
+3. 内层 `charAt(i+j)` 与 `needle.charAt(j)` 比较
+
+**Java 基础点**：`String.isEmpty()`、`charAt`、`length()` 方法
+**ACM 输入套路**：套路 2 双字符串 next
+
+**关联题**：KMP 进阶（Phase 3），本题暴力即可 AC
+
+---
+
+### 380 O(1) 时间插入、删除和获取随机元素 [M]  模式: 数据结构设计
+
+**一句话题意**：设计数据结构，支持 O(1) 插入、删除、随机获取。
+
+**记忆口诀**：
+> List 存值 Map 存位，插入尾追加；删除末位替换法，先换后删 O(1)。
+
+**可背模板**：
+  list = [], idx = {}
+  insert(val): if val in idx: return false
+      idx[val] = len(list); list.append(val); return true
+  remove(val): if val not in idx: return false
+      i = idx[val]; last = list[-1]
+      list[i] = last; idx[last] = i
+      list.pop(); del idx[val]; return true
+  getRandom(): return list[randInt(0, len-1)]
+
+**Java 完整解法**：[Solution_380.java](file:///c:/Users/26947/Desktop/summer/Algorithm/src/phase1_arrays_strings/day7_string_match_ds_review/Solution_380.java)
+
+**复杂度**：insert/remove/getRandom 均 O(1)
+
+**关键易错点**：
+1. 删除时「先换后删」顺序：先把末位元素搬到 i 位，再尾删
+2. `last` 替换到 `i` 后必须更新 `idx.put(last, i)`
+3. 最后 `list.remove(size-1)` + `idx.remove(val)`
+4. 特殊情况：删除的就是末位元素，上述流程仍自洽（last == val，但 idx.remove(val) 最后执行）
+
+**Java 基础点**：`ArrayList`、`HashMap`、`Random.nextInt`、`list.set`/`list.remove`
+**ACM 输入套路**：以 LeetCode 调用序列为主，ACM 化需自行解析操作序列
+
+**关联题**：HashMap+List 组合典范，381（允许重复版，进阶）
+
+---
+
+### 今日口诀合集（Day 7）
+
+1. 暴力双循环，外层 haystack，内层 needle；首字匹配才深入，全部对上即返回。（28）
+2. List 存值 Map 存位，插入尾追加；删除末位替换法，先换后删 O(1)。（380）
+
+---
+
+## Day 7 总串联表（Phase 1 背诵卡）
+
+| 模式 | 口诀 | 代表题 |
+|------|------|--------|
+| 快慢双指针 | 慢停快跑，命中跳过否则接管 | 27/26/80 |
+| 三针从尾填 | 大到小入位，剩直接留 | 88 |
+| 三次反转 | 全反+前 k 反+后 n-k 反 | 189 |
+| 整体+逐词反转 | trim 后反转单词序 | 151 |
+| 股票历史最小 | 维护 minPrice，算利润差 | 121 |
+| 累加正差价 | 今天比昨高就吃差 | 122 |
+| 贪心判否 | 总剩余判否，单站累加判起点 | 134 |
+| 最远可达 | 维护 maxReach，到边即停 | 55 |
+| 边界步数 | 到 curEnd 步数++，换新界 | 45 |
+| 摩尔投票 | 计数归零换人，同加异减 | 169 |
+| 左右前缀积 | 左正扫右反扫，相乘即答案 | 238 |
+| 计数封顶 | min(c,n) 入桶，高到低累加 | 274 |
+| 方向标志 | ±1 翻转，逐行拼接 | 6 |
+| 罗马前小后减 | cur<next 减否则加 | 13 |
+| 纵向扫描 | 逐位比较所有串，越界即截 | 14 |
+| 从尾向前 | 跳空格数非空格 | 58 |
+| 暴力匹配 | 双循环，charAt 比较 | 28 |
+| List+Map | 末位替换法，先换后删 | 380 |
+
+---
+
+## ACM I/O 模板卡索引
+
+- 套路 1（单组 n+数组）：Day 1/2/5 用
+- 套路 2（多组直到 EOF）：Day 3/4 用
+- 套路 3（带字符串 nextLine）：Day 6/7 用
+- 套路 4（二维矩阵）：Phase 3 备用
+
+详见 NOTES.md 开头「ACM 输入输出专题」节。
