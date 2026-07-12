@@ -477,4 +477,110 @@ for (int i = 0; i < m; i++)
 2. 维护当前边界，到了就跳一步；最远可达更新，到边界换新界。（45）
 3. 计数归零换人，同则加一异减一；多数必胜出，最后候选人即答案。（169）
 
+## Day 5 · 前缀后缀 + 计数统计
+
+### 238 除自身以外的数组的乘积 [M]  模式: 前缀后缀
+
+**一句话题意**：返回数组 ans，ans[i] = nums 中除 nums[i] 外其余元素之积，禁用除法。
+
+**记忆口诀**：
+> 左积正扫一遍，右积反扫一遍；左乘右即答案，无需除法。
+
+**可背模板**：
+  ans[0] = 1
+  for i in [1, n): ans[i] = ans[i-1] * nums[i-1]   // 左积
+  right = 1
+  for i in [n-1, 0]:                                 // 反扫叠加右积
+      ans[i] *= right
+      right *= nums[i]
+  return ans
+
+**Java 完整解法**：[Solution_238.java](file:///c:/Users/26947/Desktop/summer/Algorithm/src/phase1_arrays_strings/day5_prefix_count/Solution_238.java)
+
+**复杂度**：O(n) / O(1)（输出数组不算空间）
+
+**关键易错点**：
+1. `ans[0] = 1` 初始化（左积的起点）
+2. 右积用单变量 `right` 节省空间（无需额外数组）
+3. 反扫时先 `ans[i] *= right` 再 `right *= nums[i]`（顺序不能反）
+
+**Java 基础点**：`int[]` 初始化默认 0、单变量滚动累乘
+**ACM 输入套路**：套路 1 单组 n+数组
+
+**关联题**：前缀积典范，与 Day 1 双指针属不同家族
+
+---
+
+### 274 H 指数 [M]  模式: 计数统计 ⭐重点题
+
+**一句话题意**：求最大 h，使至少 h 篇论文引用数 ≥ h。
+
+**记忆口诀**：
+> 引用数封顶 n，计数映射到 n+1；从高到低累加，累加值 >= 当前引用即 H。
+
+**可背模板**：
+  cnt = new int[n+1]
+  for c in citations: cnt[min(c, n)]++
+  total = 0
+  for i in [n, 0]:
+      total += cnt[i]
+      if total >= i: return i
+  return 0
+
+**Java 完整解法**：[Solution_274.java](file:///c:/Users/26947/Desktop/summer/Algorithm/src/phase1_arrays_strings/day5_prefix_count/Solution_274.java)
+
+**复杂度**：O(n) / O(n)
+
+**关键易错点**：
+1. `Math.min(c, n)` 封顶——引用数 > n 的等价于 n（不影响 h ≤ n）
+2. 从高到低累加（i = n 递减到 0）
+3. `total >= i` 即返回 i（至少 i 篇引用 ≥ i）
+
+**Java 基础点**：`Math.min`、`int[]` 计数数组、反向 for
+**ACM 输入套路**：套路 1 单组 n+数组
+
+**关联题**：计数排序思想，275（已排序数组的 H 指数，进阶）
+
+---
+
+### 6 Z 字形变换 [M]  模式: 周期索引 ⭐重点题
+
+**一句话题意**：字符串按 Z 字形排成 numRows 行，输出按行读的结果。
+
+**记忆口诀**：
+> 方向标志 ±1，到边即翻转；逐行 StringBuilder，最后拼成串。
+
+**可背模板**：
+  if numRows == 1: return s
+  rows = StringBuilder[numRows]
+  i = 0, dir = 1
+  for c in s:
+      rows[i].append(c)
+      if i == 0: dir = 1
+      elif i == numRows-1: dir = -1
+      i += dir
+  return concat(rows)
+
+**Java 完整解法**：[Solution_6.java](file:///c:/Users/26947/Desktop/summer/Algorithm/src/phase1_arrays_strings/day5_prefix_count/Solution_6.java)
+
+**复杂度**：O(n) / O(n)
+
+**关键易错点**：
+1. `numRows == 1` 特判（否则 dir 永远翻转，死循环）
+2. 方向标志在边界翻转：i==0 向下，i==numRows-1 向上
+3. 用 `StringBuilder[]` 按行收集，最后拼接
+
+**Java 基础点**：`StringBuilder[]` 数组、`toCharArray`、增强 for 遍历
+**ACM 输入套路**：套路 3 字符串+整数
+
+**关联题**：方向标志法典范，与 238/274 同属「扫描技巧」家族
+
+---
+
+### 今日口诀合集（Day 5）
+
+1. 左积正扫一遍，右积反扫一遍；左乘右即答案，无需除法。（238）
+2. 引用数封顶 n，计数映射到 n+1；从高到低累加，累加值 >= 当前引用即 H。（274）
+3. 方向标志 ±1，到边即翻转；逐行 StringBuilder，最后拼成串。（6）
+
 <!-- 后续 Day 2–7 同样在此追加 -->
