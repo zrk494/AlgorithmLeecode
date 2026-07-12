@@ -271,4 +271,106 @@ for (int i = 0; i < m; i++)
 2. 整体反转一次，逐词反转一次；多余空格 trim，单词间单空格。（151）
 3. k 先取模，三次反转搞定：全反转、前 k 反转、后 n-k 反转。（189）
 
+## Day 3 · 贪心 I：股票 + 加油
+
+### 121 买卖股票的最佳时机 [E]  模式: 贪心 I
+
+**一句话题意**：单次买卖，求最大利润。
+
+**记忆口诀**：
+> 维护历史最小价，每日算利润差；最大利润即答案，一次遍历搞定。
+
+**可背模板**：
+  minPrice = MAX, maxProfit = 0
+  for p in prices:
+      if p < minPrice: minPrice = p
+      else: maxProfit = max(maxProfit, p - minPrice)
+  return maxProfit
+
+**Java 完整解法**：[Solution_121.java](file:///c:/Users/26947/Desktop/summer/Algorithm/src/phase1_arrays_strings/day3_greedy_stock_gas/Solution_121.java)
+
+**复杂度**：O(n) / O(1)
+
+**关键易错点**：
+1. `Integer.MAX_VALUE` 初始化 minPrice
+2. 空数组判空返回 0
+3. `if-else` 结构：更新最小价 OR 更新最大利润（同一天不能既买又卖，但若 p < minPrice 则无利润可算，逻辑自洽）
+
+**Java 基础点**：`Integer.MAX_VALUE`、`Math.max`、增强 for
+**ACM 输入套路**：套路 2 多组直到 EOF
+
+**关联题**：122（多次买卖版）、123/188（限次数版，进阶）
+
+---
+
+### 122 买卖股票的最佳时机 II [M]  模式: 贪心 I
+
+**一句话题意**：可多次买卖，求最大利润。
+
+**记忆口诀**：
+> 可多次买卖，累加正差价；今天比昨高，就把差吃下。
+
+**可背模板**：
+  profit = 0
+  for i in [1, n):
+      if prices[i] > prices[i-1]:
+          profit += prices[i] - prices[i-1]
+  return profit
+
+**Java 完整解法**：[Solution_122.java](file:///c:/Users/26947/Desktop/summer/Algorithm/src/phase1_arrays_strings/day3_greedy_stock_gas/Solution_122.java)
+
+**复杂度**：O(n) / O(1)
+
+**关键易错点**：
+1. 累加所有正差价（等价于贪心所有上升段）
+2. 从 i=1 开始，比较 `prices[i]` 与 `prices[i-1]`
+3. 不需要记录买卖点，直接累加差价
+
+**Java 基础点**：`for (int i = 1; ...)` 起点为 1
+**ACM 输入套路**：套路 2 多组直到 EOF
+
+**关联题**：121（单次买卖版）
+
+---
+
+### 134 加油站 [M]  模式: 贪心 I ⭐重点题
+
+**一句话题意**：环形路 n 个加油站，求能跑完一圈的起点。
+
+**记忆口诀**：
+> 总剩余判否，单站累加判起点；累加为负即重置，起点设为下一站。
+
+**可背模板**：
+  total = 0, tank = 0, start = 0
+  for i in [0, n):
+      diff = gas[i] - cost[i]
+      total += diff
+      tank += diff
+      if tank < 0:
+          start = i + 1
+          tank = 0
+  return total >= 0 ? start : -1
+
+**Java 完整解法**：[Solution_134.java](file:///c:/Users/26947/Desktop/summer/Algorithm/src/phase1_arrays_strings/day3_greedy_stock_gas/Solution_134.java)
+
+**复杂度**：O(n) / O(1)
+
+**关键易错点**：
+1. `total >= 0` 才有解（总油量 ≥ 总耗油）
+2. `tank < 0` 时重置起点为 `i+1`，tank 清零
+3. 不必担心回不到起点——total 判否已保证（若 total ≥ 0，从 start 出发必然能跑完）
+
+**Java 基础点**：三元运算符返回、累加变量
+**ACM 输入套路**：套路 2 多组直到 EOF（双数组 gas + cost）
+
+**关联题**：贪心判否的典范，与 121/122 同属贪心家族但思想不同
+
+---
+
+### 今日口诀合集（Day 3）
+
+1. 维护历史最小价，每日算利润差；最大利润即答案，一次遍历搞定。（121）
+2. 可多次买卖，累加正差价；今天比昨高，就把差吃下。（122）
+3. 总剩余判否，单站累加判起点；累加为负即重置，起点设为下一站。（134）
+
 <!-- 后续 Day 2–7 同样在此追加 -->
