@@ -172,4 +172,103 @@ for (int i = 0; i < m; i++)
 2. 快慢双指针，慢从 1 起；与前值不同则写，相同则快针继续。（26）
 3. 快慢双指针，慢位写新值；允许两次重复，慢针小于 2 直通。（80）
 
+## Day 2 · 双指针进阶：合并 / 反转 / 轮转
+
+### 88 合并两个有序数组 [E]  模式: 双指针进阶
+
+**一句话题意**：把 nums2 合并进 nums1 末尾，结果有序。
+
+**记忆口诀**：
+> 三针从尾填，大到小入位；nums2 空即止，否则剩直接留。
+
+**可背模板**：
+  i = m-1, j = n-1, k = m+n-1
+  while i >= 0 and j >= 0:
+      nums1[k--] = nums1[i] >= nums2[j] ? nums1[i--] : nums2[j--]
+  while j >= 0:
+      nums1[k--] = nums2[j--]
+
+**Java 完整解法**：[Solution_88.java](file:///c:/Users/26947/Desktop/summer/Algorithm/src/phase1_arrays_strings/day2_pointer_merge_reverse/Solution_88.java)
+
+**复杂度**：O(m+n) / O(1)，从尾填避免覆盖。
+
+**关键易错点**：
+1. 三针 i/j/k 都从尾部开始（避免正向覆盖未处理元素）
+2. nums1 剩余不必处理（已在位），只需处理 nums2 剩余
+3. 三元运算符紧凑写法 `a >= b ? a-- : b--`
+
+**Java 基础点**：三元运算符、`--` 自减在表达式中的时机
+**ACM 输入套路**：套路 1 单组 m+n+两数组
+
+**关联题**：与 27/26 同属双指针家族，区别在「合并」而非「删除」
+
+---
+
+### 151 反转字符串中的单词 [M]  模式: 双指针进阶
+
+**一句话题意**：反转字符串中的单词顺序，单词间单空格。
+
+**记忆口诀**：
+> 整体反转一次，逐词反转一次；多余空格 trim，单词间单空格。
+
+**可背模板**（简化版）：
+  words = s.trim().split("\\s+")
+  sb = StringBuilder
+  for i in [len-1, 0]:
+      sb.append(words[i])
+      if i > 0: sb.append(' ')
+  return sb.toString()
+
+**Java 完整解法**：[Solution_151.java](file:///c:/Users/26947/Desktop/summer/Algorithm/src/phase1_arrays_strings/day2_pointer_merge_reverse/Solution_151.java)
+
+**复杂度**：O(n) / O(n)
+
+**关键易错点**：
+1. `trim()` 去首尾空格，`split("\\s+")` 按多空格分词
+2. 反向遍历 words 数组拼接
+3. 最后一个单词后不加空格（`if (i > 0)` 判断）
+
+**Java 基础点**：`String.trim()`、`split("\\s+")` 正则、`StringBuilder.append`
+**ACM 输入套路**：套路 3 带字符串 nextLine
+
+**关联题**：189 同用「反转」思想，151 反转单词序、189 反转数组段
+
+---
+
+### 189 轮转数组 [M]  模式: 双指针进阶
+
+**一句话题意**：数组向右轮转 k 步，原地修改。
+
+**记忆口诀**：
+> k 先取模，三次反转搞定：全反转、前 k 反转、后 n-k 反转。
+
+**可背模板**：
+  k = k % n
+  if k == 0: return
+  reverse(nums, 0, n-1)
+  reverse(nums, 0, k-1)
+  reverse(nums, k, n-1)
+
+**Java 完整解法**：[Solution_189.java](file:///c:/Users/26947/Desktop/summer/Algorithm/src/phase1_arrays_strings/day2_pointer_merge_reverse/Solution_189.java)
+
+**复杂度**：O(n) / O(1)
+
+**关键易错点**：
+1. `k = k % n` 必做（k 可能大于 n）
+2. `k == 0` 早返回（避免无意义反转）
+3. 三段反转顺序：全反→前 k 反→后 n-k 反
+
+**Java 基础点**：`%` 取模、私有 reverse 辅助方法、while 交换
+**ACM 输入套路**：套路 1 单组 n+k+数组
+
+**关联题**：151 同用反转思想
+
+---
+
+### 今日口诀合集（Day 2）
+
+1. 三针从尾填，大到小入位；nums2 空即止，否则剩直接留。（88）
+2. 整体反转一次，逐词反转一次；多余空格 trim，单词间单空格。（151）
+3. k 先取模，三次反转搞定：全反转、前 k 反转、后 n-k 反转。（189）
+
 <!-- 后续 Day 2–7 同样在此追加 -->
